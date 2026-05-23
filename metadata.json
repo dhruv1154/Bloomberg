@@ -1,0 +1,6 @@
+{
+  "name": "Low Latency Market Terminal",
+  "description": "High-performance market data terminal and low-latency systems visualizer featuring production-grade async Rust architecture, ZeroMQ, lock-free ring buffers, live Binance WebSocket ingestion, and microsecond-level telemetry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,38 @@
+[package]
+name = "low_latency_terminal"
+version = "0.1.0"
+edition = "2021"
+authors = ["Principal Low-Latency Systems Engineer & Quant Dev"]
+description = "A production-grade, highly optimized async market terminal using Ratatui and lock-free SPSC queues."
+
+[dependencies]
+# Async Runtime
+tokio = { version = "1.38", features = ["full"] }
+
+# Multi-threading & Low-latency Utilities
+core_affinity = "0.8"       # For pinning feed-ingestion threads to specific CPU cores
+rtrb = "0.3"                # Ultra-fast lock-free single-producer single-consumer (SPSC) ring buffer
+
+# Networking & Telemetry
+tokio-tungstenite = { version = "0.21", features = ["rustls-tls-native-roots"] }
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+thiserror = "1.0"           # Clean zero-overhead error definitions
+
+# Serialization - Zero-copy JSON borrowing
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Decoupled Core Messaging (Optional zero-config MQ integrations)
+# tmq = "0.3.0"             # Internal decoupler messaging (uncomment if using ZeroMQ daemon)
+
+# UI Layer
+ratatui = "0.26"            # Grid-based immediate mode Terminal User Interface
+crossterm = { version = "0.27", features = ["event-stream"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+[profile.release]
+opt-level = 3
+lto = "fat"                 # Enable Link Time Optimization for maximum performance
+codegen-units = 1           # Reduce parallel code generation units to increase LLVM optimization capabilities
+panic = "abort"             # Eliminate panic unwinding overhead in execution critical paths
